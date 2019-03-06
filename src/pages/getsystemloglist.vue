@@ -17,10 +17,13 @@
       </el-date-picker>
       <el-date-picker
         class="datastyle"
-        v-model="value1"
+        v-model="value2"
+        align="right"
         type="date"
-        placeholder="选择结束日期">
+        placeholder="选择日期"
+        :picker-options="pickerOptions1">
       </el-date-picker>
+
       <span class="buttonstyle">
         <el-button type="primary" icon="el-icon-search"  >搜索</el-button>
       </span>
@@ -96,16 +99,15 @@
     <div class="paging">
       <div class="block">
         <el-pagination
-
           :current-page="currentPage4"
           :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-size="10"
           layout="total, sizes, prev, pager, next, jumper"
           :total="totalCount">
         </el-pagination>
       </div>
     </div>
-
+{{totalCount}}
 
 
   </div>
@@ -117,6 +119,33 @@
     name: 'loglist',
     data() {
       return {
+        pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+        value1: '',
+        value2: '',
         tabledata1:[],
         pagedata:{},
         name:90,
